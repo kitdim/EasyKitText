@@ -28,8 +28,32 @@ def close_file():
     t.insert('2.4', 'Закрытие файла не готово')
 
 
+def change_theme(theme_name):
+    t['bg'] = theme_color[theme_name]['text_bg']
+    t['fg'] = theme_color[theme_name]['text_fg']
+    t['insertbackground'] = theme_color[theme_name]['cursor']
+    t['selectbackground'] = theme_color[theme_name]['select_bg']
+
+
+# Словарь тем
+theme_color = {
+    "dark": {
+        "text_bg":      "#343D46",
+        "text_fg":      "#C6DEC1",
+        "cursor":       "#EDA756",
+        "select_bg":    "#4E5A65"
+    },
+    "light": {
+        "text_bg":      "#fff",
+        "text_fg":      "#000",
+        "cursor":       "#8000FF",
+        "select_bg":    "#777"
+    },
+}
+
+# Создание главного окна, его разрешение и расположение при запуске
 root = Tk()
-root.geometry('400x400+1000+300')
+root.geometry('1000x500+300+600')
 
 main_menu = Menu(root)
 root.config(menu=main_menu)
@@ -50,14 +74,16 @@ redaction_menu = Menu(main_menu, tearoff=0)
 redaction_menu.add_command(label="Очистить окно", command=del_str)
 main_menu.add_cascade(label="Редактирование", menu=redaction_menu)
 
-# Справка
-help_menu = Menu(main_menu, tearoff=0)
-help_menu_sub = Menu(help_menu, tearoff=0)
-help_menu_sub.add_command(label="Онлайн")
-help_menu_sub.add_command(label="Оффлайн")
-help_menu.add_cascade(label="Помощь", menu=help_menu_sub)
-help_menu.add_command(label="О программе")
-main_menu.add_cascade(label="Справка", menu=help_menu)
+# Тема
+theme_menu = Menu(main_menu, tearoff=0)
+theme_menu_sub = Menu(theme_menu, tearoff=0)
+theme_menu_sub.add_command(
+    label="Light Theme", command=lambda: change_theme('light'))
+theme_menu_sub.add_command(
+    label="Dark Theme", command=lambda: change_theme('dark'))
+theme_menu.add_cascade(label="Оформление", menu=theme_menu_sub)
+theme_menu.add_command(label="О программе")
+main_menu.add_cascade(label="Разное", menu=theme_menu)
 
 # f_menu = Frame(root, bg="#1F252A", height=40)
 # f_menu.pack(fill=X)
@@ -66,8 +92,8 @@ f_text.pack(fill=BOTH, expand=1)
 
 
 # Найстройка окна ввода текста
-t = Text(f_text, bg="#343D46", fg="#C6DEC1", padx=10, pady=10, wrap=WORD,
-         insertbackground="#EDA756", selectbackground="#4E5A65", width=30, spacing3=10)
+t = Text(f_text, bg=theme_color['dark']['text_bg'], fg=theme_color['dark']['text_fg'], padx=10, pady=10, wrap=WORD,
+         insertbackground=theme_color['dark']['cursor'], selectbackground=theme_color['dark']['select_bg'], width=30, spacing3=10, font=("Courier New", 11))
 t.pack(fill=BOTH, expand=1, side=LEFT)
 
 # Найстройка скрола
