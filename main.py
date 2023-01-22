@@ -53,7 +53,7 @@ theme_color = {
 
 # Создание главного окна, его разрешение и расположение при запуске
 root = Tk()
-root.geometry('1000x500+300+600')
+root.geometry('1000x500+300+100')
 
 main_menu = Menu(root)
 root.config(menu=main_menu)
