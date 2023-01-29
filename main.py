@@ -1,4 +1,6 @@
 from tkinter import *
+from tkinter import messagebox
+from tkinter import filedialog
 
 
 def add_str():
@@ -14,18 +16,27 @@ def get_str():
 
 
 def open_file():
-    del_str()
-    t.insert('2.4', 'Открытие файла не готово')
+    file_path = filedialog.askopenfilename(
+        title="Выбор файла", filetypes=(("Текстовые документы (*.txt)", "*.txt"), ("Все файлы", "*.*")))
+    if file_path:
+        t.delete('1.0', END)
+        t.insert('1.0', open(file_path, encoding='utf-8').read())
 
 
 def save_file():
-    del_str()
-    t.insert('2.4', 'Сохранение файла не готово')
+    file_path = filedialog.asksaveasfilename(
+        title="Сохранение", filetypes=(("Текстовые документы (*.txt)", "*.txt"), ("Все файлы", "*.*")))
+    file = open(file_path, 'w', encoding='utf-8')
+    text = t.get('1.0', END)
+    file.write(text)
+    file.close()
 
 
-def close_file():
-    del_str()
-    t.insert('2.4', 'Закрытие файла не готово')
+def close():
+    answer = messagebox.askokcancel(
+        title="Выход", message="Закрыть программу?")
+    if answer:
+        root.destroy()
 
 
 def change_theme(theme_name):
@@ -33,6 +44,11 @@ def change_theme(theme_name):
     t['fg'] = theme_color[theme_name]['text_fg']
     t['insertbackground'] = theme_color[theme_name]['cursor']
     t['selectbackground'] = theme_color[theme_name]['select_bg']
+
+
+def about_program():
+    messagebox.showinfo(title="О программе",
+                        message="KitText версия 0.0.1")
 
 
 # Словарь тем
@@ -53,6 +69,8 @@ theme_color = {
 
 # Создание главного окна, его разрешение и расположение при запуске
 root = Tk()
+root.title('KitText')  # создание титульника
+root.iconbitmap('penis.ico')  # установление логотипа
 root.geometry('1000x500+300+100')
 
 main_menu = Menu(root)
@@ -66,13 +84,13 @@ file_menu = Menu(main_menu, tearoff=0)
 file_menu.add_command(label="Открыть", command=open_file)
 file_menu.add_command(label="Сохранить", command=save_file)
 file_menu.add_separator()
-file_menu.add_command(label="Выход", command=close_file)
+file_menu.add_command(label="Выход", command=close)
 main_menu.add_cascade(label="Файл", menu=file_menu)
 
 # Редактирование
 redaction_menu = Menu(main_menu, tearoff=0)
 redaction_menu.add_command(label="Очистить окно", command=del_str)
-main_menu.add_cascade(label="Редактирование", menu=redaction_menu)
+main_menu.add_cascade(label="Правка", menu=redaction_menu)
 
 # Тема
 theme_menu = Menu(main_menu, tearoff=0)
@@ -82,7 +100,7 @@ theme_menu_sub.add_command(
 theme_menu_sub.add_command(
     label="Dark Theme", command=lambda: change_theme('dark'))
 theme_menu.add_cascade(label="Оформление", menu=theme_menu_sub)
-theme_menu.add_command(label="О программе")
+theme_menu.add_command(label="О программе", command=about_program)
 main_menu.add_cascade(label="Разное", menu=theme_menu)
 
 # f_menu = Frame(root, bg="#1F252A", height=40)
