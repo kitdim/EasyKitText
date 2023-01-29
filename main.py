@@ -70,7 +70,7 @@ theme_color = {
 # Создание главного окна, его разрешение и расположение при запуске
 root = Tk()
 root.title('KitText')  # создание титульника
-root.iconbitmap('penis.ico')  # установление логотипа
+root.iconbitmap('kit.ico')  # установление логотипа
 root.geometry('1000x500+300+100')
 
 main_menu = Menu(root)
